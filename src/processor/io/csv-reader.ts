@@ -5,21 +5,14 @@ import * as path from "path";
 import {BASE_DIRECTORY} from "../../configuration/application.config";
 import {Options} from "csv-parse";
 import {TotoRecordType} from "../../types/toto-record.type";
+import {CsvAbstract} from "./csv-abstract";
 
-export class CsvReader {
+export class CsvReader extends CsvAbstract{
   private csvStream: fs.ReadStream;
 
   constructor(protected readonly filePath: string) {
-    if (!fs.existsSync(this.getCsvFilePath())) {
-      fs.openSync(this.getCsvFilePath(), 'a');
-    }
-
-    console.log(this.getCsvFilePath())
+    super(filePath);
     this.csvStream = fs.createReadStream(this.getCsvFilePath());
-  }
-
-  private getCsvFilePath() {
-    return path.join(BASE_DIRECTORY, this.filePath)
   }
 
   public async getData(): Promise<Record<string, TotoRecordType>> {
